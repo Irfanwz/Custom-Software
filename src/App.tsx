@@ -6,7 +6,7 @@ import { StarterPackage } from './components/StarterPackage';
 import { WhyUs } from './components/WhyUs';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
-import { ChatWidget } from './components/chatWidget';
+import { ChatWidget } from './components/ChatWidget';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
