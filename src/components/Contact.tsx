@@ -10,15 +10,31 @@ export const Contact: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formState),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data?.ok) {
+        throw new Error(data?.error || 'Failed to send. Please try again.');
+      }
+
       setSubmitted(true);
       setFormState({ name: '', email: '', interest: 'package', message: '' });
-    }, 1500);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -41,7 +57,7 @@ export const Contact: React.FC = () => {
           {submitted ? (
             <div className="text-center py-12">
               <h3 className="text-3xl font-bold text-white mb-4">Transmission Received.</h3>
-              <p className="text-slate-400 mb-8">Stand by for contact.</p>
+              <p className="text-slate-400 mb-8">Stand by for contact. We just sent your request to the team inbox.</p>
               <button onClick={() => setSubmitted(false)} className="text-red-500 underline">Reset Terminal</button>
             </div>
           ) : (
@@ -108,6 +124,11 @@ export const Contact: React.FC = () => {
                 {isSubmitting ? 'TRANSMITTING...' : 'INITIATE CONTACT'}
                 {!isSubmitting && <Send className="w-5 h-5" />}
               </button>
+              {error && (
+                <p className="text-red-400 text-center text-sm" role="alert">
+                  {error}
+                </p>
+              )}
             </form>
           )}
         </div>
