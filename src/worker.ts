@@ -73,8 +73,8 @@ ${message}`;
           },
         ],
         from: {
-          // Default from is admin inbox unless overridden via FROM_EMAIL
-          email: env.FROM_EMAIL || 'irfanwz@gmail.com',
+          // MailChannels requires a domain you control as the sender
+          email: env.FROM_EMAIL || 'no-reply@customsoftware.irfanwz.workers.dev',
           name: 'Custom Software Contact',
         },
         reply_to: {
