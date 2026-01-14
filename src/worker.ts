@@ -46,9 +46,7 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
     if (!name || !email || !message) {
       return json({ error: 'Missing required fields.' }, 400);
     }
-    if (!env.TO_EMAIL) {
-      return json({ error: 'Email destination not configured.' }, 500);
-    }
+    const toEmail = env.TO_EMAIL || 'irfanwz@gmail.com';
 
     const htmlBody = `
       <h2>New Contact Request</h2>
@@ -71,7 +69,7 @@ ${message}`;
       body: JSON.stringify({
         personalizations: [
           {
-            to: [{ email: env.TO_EMAIL }],
+            to: [{ email: toEmail }],
           },
         ],
         from: {
