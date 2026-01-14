@@ -1,5 +1,9 @@
 name = "custom-software"
 compatibility_date = "2026-01-13"
 
+[build]
+# Ensure Vite assets are generated before Wrangler uploads them
+command = "npm run build"
+
 [assets]
 directory = "./dist"
